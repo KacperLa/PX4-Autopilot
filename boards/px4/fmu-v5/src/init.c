@@ -95,6 +95,7 @@ extern void led_on(int led);
 extern void led_off(int led);
 __END_DECLS
 
+extern void can_devinit(void);
 
 /************************************************************************************
  * Name: board_peripheral_reset
@@ -222,6 +223,7 @@ __EXPORT int board_app_initialize(uintptr_t arg)
 	/* Need hrt running before using the ADC */
 
 	px4_platform_init();
+	can_devinit();
 
 	if (OK == board_determine_hw_info()) {
 		syslog(LOG_INFO, "[boot] Rev 0x%1x : Ver 0x%1x %s\n", board_get_hw_revision(), board_get_hw_version(),
@@ -234,7 +236,6 @@ __EXPORT int board_app_initialize(uintptr_t arg)
 	/* configure SPI interfaces (after we determined the HW version) */
 
 	stm32_spiinitialize();
-
 
 	/* Does this board have CAN 2 or CAN 3 if not decouple the RX
 	 * from IP block Leave TX connected
